@@ -12,7 +12,7 @@
     "express": "~4.13.0",
     "jade": "~1.11.0",
     "jsonfile": "^2.2.1",
-    "meetup-api": "~0.1.25",
+    "lodash": "^3.10.0",
     "moment": "^2.10.3",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
