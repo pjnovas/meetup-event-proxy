@@ -1,6 +1,8 @@
+var debug = require('debug')('meetup-event-proxy:api');
 
 var jf = require('jsonfile')
   , eventPath = __dirname + '/event.json'
+  , cors = require('cors')
   , moment = require("moment");
 
 var config = require('./config.json');
@@ -35,11 +37,12 @@ function checkAndUpdate(req, res, next){
 
   var datetime = moment.unix(res.event.timestamp);
   if (datetime.add(1, 'hour') > moment()){
-    console.log('using cache');
+    debug('>> Using cache');
     return next();
   }
 
   function SaveAndContinue(newObj){
+    debug('>> Sorting new Cache');
     jf.writeFile(eventPath, newObj, function(err){
       if (err){
         console.log(err);
@@ -51,6 +54,7 @@ function checkAndUpdate(req, res, next){
     });
   }
 
+  debug('>> Fetching Meetup');
   meetup.getEvent({
     id: config.MEETUP_EVENT_ID
   }, function(error, event){
@@ -71,7 +75,7 @@ function checkAndUpdate(req, res, next){
 var express = require('express');
 var router = express.Router();
 
-router.get('/api/meetup_event', getCache, checkAndUpdate, function(req, res){
+router.get('/api/meetup_event', cors(), getCache, checkAndUpdate, function(req, res){
   delete res.event.data.ratelimit;
   res.send(res.event);
 });
