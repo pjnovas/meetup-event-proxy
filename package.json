@@ -15,6 +15,7 @@
     "lodash": "^3.10.0",
     "moment": "^2.10.3",
     "morgan": "~1.6.1",
+    "meetup-api": "~0.1.25",
     "serve-favicon": "~2.3.0"
   }
 }
