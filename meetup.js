@@ -47,7 +47,8 @@ function checkAndUpdate(req, res, next){
   debug('>> Fetching Meetup');
 
   meetup.getEvents({
-    event_id: config.MEETUP_EVENT_IDS
+    event_id: config.MEETUP_EVENT_IDS,
+    status: config.MEETUP_EVENT_STATUS || 'upcoming',
   }, function(error, events){
     if (error) {
       console.dir(error);
