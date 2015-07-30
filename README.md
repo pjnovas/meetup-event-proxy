@@ -42,3 +42,17 @@ Example response for `meetup_events`:
   }
 }
 ```
+
+Example of use from client side:  
+```javascript
+$.ajax({
+  url: "http://yourdomain.com/api/meetup_events"
+}).done(function(data){
+  var events = data.events;
+  for(var p in events) {
+    console.dir(events[p]);
+  }
+  // or directly by
+  console.dir(events["event_id"]);
+});
+```
