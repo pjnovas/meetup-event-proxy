@@ -43,7 +43,7 @@ Example response for `meetup_events`:
 }
 ```
 
-Example of use from client side:  
+Example of use from client side with ajax (CORS support is already enabled):  
 ```javascript
 $.ajax({
   url: "http://yourdomain.com/api/meetup_events"
