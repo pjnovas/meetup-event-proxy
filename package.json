@@ -1,7 +1,7 @@
 {
-  "name": "meetup-count",
-  "version": "0.0.0",
-  "private": true,
+  "name": "meetup-events-proxy",
+  "version": "0.2.0",
+  "author": "Pablo Novas <pjnovas@gmail.com>",
   "scripts": {
     "start": "DEBUG=meetup-event-proxy:* node ./bin/www"
   },

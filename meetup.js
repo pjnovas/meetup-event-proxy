@@ -26,7 +26,10 @@ function getCache(req, res, next){
 function checkAndUpdate(req, res, next){
 
   var datetime = moment.unix(res.events.timestamp);
-  if (datetime.add(1, 'hour') > moment()){
+  var cacheTime = config.CACHE || { 'hour': 1 };
+  var cacheType = Object.keys(cacheTime)[0]
+
+  if ( datetime.add(cacheTime[cacheType], cacheType) > moment() ){
     debug('>> Using cache');
     return next();
   }
@@ -55,9 +58,28 @@ function checkAndUpdate(req, res, next){
       return next();
     }
 
-    SaveAndContinue({
-      timestamp: moment().unix(),
-      data: events
+    var groupIds = events.results.map(function(event){ return event.group.id; });
+    groupIds = _.uniq(groupIds);
+
+    meetup.getGroups({
+      group_id: groupIds
+    }, function(error, groups){
+      if (error) {
+        console.dir(error);
+        return next();
+      }
+
+      var _groups = _.object(_.pluck(groups.results, 'id'), groups.results);
+
+      events.results.forEach(function(event){
+        event.group = _groups[event.group.id];
+      });
+
+      SaveAndContinue({
+        timestamp: moment().unix(),
+        data: events
+      });
+
     });
 
   });
@@ -77,7 +99,9 @@ router.get('/api/meetup_events_full', cors(), getCache, checkAndUpdate, function
 router.get('/api/meetup_events', cors(), getCache, checkAndUpdate, function(req, res){
 
   var events = _.map(res.events.data.results, function(event){
-    return _.pick(event, ['id', 'name', 'status', 'time', 'yes_rsvp_count']);
+    var _event = _.pick(event, ['id', 'name', 'status', 'time', 'yes_rsvp_count', 'rsvp_limit', 'waitlist_count']);
+    _event.group = _.pick(event.group, ['id', 'name', 'urlname', 'members']);
+    return _event;
   });
 
   events = _.object(_.pluck(events, 'id'), events);

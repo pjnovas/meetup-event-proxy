@@ -3,8 +3,9 @@ A Meetup Event API proxy to use on your client for "realtime" event info, like c
 
 1. `npm install`
 2. Rename `config.json.sample` into `config.json`
-3. Add your `Meetup API Key` and a comma separated `EventID`s
-4. `npm start`
+3. Add your `Meetup API Key` and an array of `EventID`s
+4. Set the Cache time, options could be `days`, `hours`, `minutes`, 'seconds'
+5. `npm start`
 
 Shoot on your browser at 
 * `http://localhost:3000/api/meetup_events` quick counters, less payload  
